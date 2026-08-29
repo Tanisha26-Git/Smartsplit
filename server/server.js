@@ -6,6 +6,7 @@ const authRoutes = require("./routes/authRoutes");
 const groupRoutes = require("./routes/groupRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
 const balanceRoutes = require("./routes/balanceRoutes");
+const settleRoutes = require("./routes/settleRoutes");
 const app = express();
 
 connectDB();
@@ -16,6 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/balances", balanceRoutes);
+app.use("/api/settle", settleRoutes);
 
 app.get("/", (req, res) => {
   res.send("SmartSplit API is running 🚀");

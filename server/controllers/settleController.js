@@ -1,12 +1,13 @@
 const Group = require("../models/Group");
 const Expense = require("../models/Expense");
 const calculateBalances = require("../utils/calculateBalances");
+const settleUp = require("../utils/settleUp");
 
 // members are populated User docs here, so compare against each member's _id.
 const isMember = (group, userId) =>
   group.members.some((m) => m._id.toString() === userId.toString());
 
-exports.getGroupBalances = async (req, res) => {
+exports.getSettlement = async (req, res) => {
   try {
     const { groupId } = req.params;
 
@@ -17,8 +18,9 @@ exports.getGroupBalances = async (req, res) => {
 
     const expenses = await Expense.find({ group: groupId });
     const balances = calculateBalances(group, expenses);
+    const transactions = settleUp(balances);
 
-    res.json(balances);
+    res.json({ balances, transactions });
   } catch (err) {
     res.status(500).json({ msg: err.message });
   }
