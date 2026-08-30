@@ -49,20 +49,20 @@ All routes are prefixed with `/api`. Routes marked 🔒 require a `Bearer <token
 | POST | `/api/auth/register` | Register a new user, returns a JWT |
 | POST | `/api/auth/login` | Log in, returns a JWT |
 
-### Groups 🔒
+### Groups 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/groups` | Create a group |
 | GET | `/api/groups` | List the groups you belong to |
 | POST | `/api/groups/:id/add-member` | Add a member by email |
 
-### Expenses 🔒
+### Expenses 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/api/expenses/:groupId` | Add an expense (equal / unequal / percentage split) |
 | GET | `/api/expenses/:groupId` | List a group's expenses |
 
-### Balances & Settle-Up 🔒
+### Balances & Settle-Up 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/api/balances/:groupId` | Each member's net balance (paid − owed) |
