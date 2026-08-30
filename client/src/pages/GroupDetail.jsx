@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import AddMemberModal from "../components/AddMemberModal";
 import AddExpenseModal from "../components/AddExpenseModal";
 import ExpenseList from "../components/ExpenseList";
+import BalancesSection from "../components/BalancesSection";
 import { getGroup } from "../api/groups";
 import { getExpenses } from "../api/expenses";
 
@@ -18,6 +19,8 @@ function GroupDetail() {
   const [expenses, setExpenses] = useState([]);
   const [expensesLoading, setExpensesLoading] = useState(true);
   const [expensesError, setExpensesError] = useState("");
+  // Bumped whenever expenses change, so balances/settle re-fetch in sync.
+  const [dataVersion, setDataVersion] = useState(0);
 
   const loadGroup = async () => {
     setLoading(true);
@@ -171,14 +174,8 @@ function GroupDetail() {
               )}
             </section>
 
-            <section className="glass-card rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-1">
-                Settle up
-              </h3>
-              <p className="text-slate-500 text-sm">
-                Balances and the minimal set of payments will appear here.
-              </p>
-            </section>
+            {/* Balances + Settle Up (re-fetch when expenses change) */}
+            <BalancesSection groupId={id} refreshKey={dataVersion} />
           </div>
         )}
       </main>
@@ -194,7 +191,10 @@ function GroupDetail() {
           open={showAddExpense}
           group={group}
           onClose={() => setShowAddExpense(false)}
-          onAdded={loadExpenses}
+          onAdded={() => {
+            loadExpenses();
+            setDataVersion((v) => v + 1);
+          }}
         />
       )}
     </div>

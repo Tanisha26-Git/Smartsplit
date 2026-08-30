@@ -1,3 +1,5 @@
+import { formatMoney } from "../utils/format";
+
 // Renders a group's expenses. Each row shows the description, amount, who paid,
 // the split type, and the per-member breakdown.
 function ExpenseList({ expenses }) {
@@ -15,7 +17,7 @@ function ExpenseList({ expenses }) {
               </p>
             </div>
             <p className="font-semibold text-slate-800 whitespace-nowrap">
-              ${Number(exp.amount).toFixed(2)}
+              {formatMoney(exp.amount)}
             </p>
           </div>
 
@@ -25,7 +27,7 @@ function ExpenseList({ expenses }) {
                 key={s._id || s.user?._id}
                 className="text-xs rounded-full bg-emerald-50 text-emerald-800 px-2.5 py-1"
               >
-                {s.user?.name || "—"}: ${Number(s.amount).toFixed(2)}
+                {s.user?.name || "—"}: {formatMoney(s.amount)}
               </span>
             ))}
           </div>

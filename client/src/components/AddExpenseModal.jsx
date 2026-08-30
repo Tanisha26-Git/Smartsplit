@@ -2,6 +2,7 @@ import { useState } from "react";
 import Modal from "./Modal";
 import { addExpense } from "../api/expenses";
 import { getUser } from "../utils/auth";
+import { formatMoney } from "../utils/format";
 
 // Add-expense form supporting equal / unequal / percentage splits.
 // - equal: split evenly across all members (backend handles the math)
@@ -71,9 +72,9 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
     if (splitType === "unequal") {
       if (Math.abs(allocated - amountNum) > 0.01) {
         setError(
-          `Split amounts add up to $${allocated.toFixed(
-            2
-          )}, but the total is $${amountNum.toFixed(2)}.`
+          `Split amounts add up to ${formatMoney(
+            allocated
+          )}, but the total is ${formatMoney(amountNum)}.`
         );
         return;
       }
@@ -218,7 +219,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
                   : "text-amber-600"
               }`}
             >
-              Allocated ${allocated.toFixed(2)} / ${amountNum.toFixed(2)}
+              Allocated {formatMoney(allocated)} / {formatMoney(amountNum)}
             </p>
           </div>
         )}
