@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BalanceChart from "./BalanceChart";
+import Spinner from "./Spinner";
 import { getBalances, getSettlement } from "../api/balances";
 import { formatMoney } from "../utils/format";
 
@@ -63,11 +64,7 @@ function BalancesSection({ groupId, refreshKey }) {
       <section className="glass-card rounded-2xl p-6">
         <h3 className="text-lg font-semibold text-slate-800 mb-4">Balances</h3>
 
-        {loading && (
-          <p className="text-slate-500 text-sm py-6 text-center">
-            Loading balances…
-          </p>
-        )}
+        {loading && <Spinner label="Loading balances…" />}
 
         {!loading && error && (
           <div className="text-center py-6">

@@ -3,12 +3,14 @@ import Modal from "./Modal";
 import { addExpense } from "../api/expenses";
 import { getUser } from "../utils/auth";
 import { formatMoney } from "../utils/format";
+import { useToast } from "./Toast";
 
 // Add-expense form supporting equal / unequal / percentage splits.
 // - equal: split evenly across all members (backend handles the math)
 // - unequal: an amount input per member; must sum to the total
 // - percentage: a percent input per member; must sum to 100
 function AddExpenseModal({ open, onClose, group, onAdded }) {
+  const toast = useToast();
   const members = group?.members || [];
   const currentUser = getUser();
 
@@ -96,6 +98,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
     setLoading(true);
     try {
       await addExpense(group._id, payload);
+      toast("Expense added ✅");
       onAdded();
       close();
     } catch (err) {

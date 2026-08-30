@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import { addMember } from "../api/groups";
+import { useToast } from "./Toast";
 
 // Adds a member (by email) to `group`. On success calls onAdded() so the
 // parent can refresh, then closes. Shows backend errors like "User not found"
 // or "User already in group".
 function AddMemberModal({ open, onClose, group, onAdded }) {
+  const toast = useToast();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,7 @@ function AddMemberModal({ open, onClose, group, onAdded }) {
     setLoading(true);
     try {
       await addMember(group._id, email.trim());
+      toast("Member added ✅");
       onAdded();
       close();
     } catch (err) {

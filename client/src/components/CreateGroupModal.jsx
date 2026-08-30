@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import { createGroup } from "../api/groups";
+import { useToast } from "./Toast";
 
 // Modal with a single "name" field. On success it calls onCreated() so the
 // parent can refresh its list, then closes.
 function CreateGroupModal({ open, onClose, onCreated }) {
+  const toast = useToast();
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,6 +23,7 @@ function CreateGroupModal({ open, onClose, onCreated }) {
     setLoading(true);
     try {
       await createGroup(name.trim());
+      toast("Group created 🎉");
       onCreated();
       close();
     } catch (err) {

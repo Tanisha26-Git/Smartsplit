@@ -14,29 +14,32 @@ function Header({ back = false }) {
 
   return (
     <header className="bg-white/70 backdrop-blur-md border-b border-white/40">
-      <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 min-w-0">
           {back && (
             <Link
               to="/dashboard"
-              className="text-sm text-slate-500 hover:text-slate-800 transition"
+              className="text-sm text-slate-500 hover:text-slate-800 transition whitespace-nowrap"
             >
               ← Back
             </Link>
           )}
-          <Link to="/dashboard" className="text-xl font-bold text-slate-800">
+          <Link
+            to="/dashboard"
+            className="text-xl font-bold text-slate-800 whitespace-nowrap"
+          >
             SmartSplit 💸
           </Link>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           {user?.name && (
-            <span className="text-sm text-slate-600">
+            <span className="hidden sm:inline text-sm text-slate-600">
               Hi, <span className="font-medium text-slate-800">{user.name}</span>
             </span>
           )}
           <button
             onClick={handleLogout}
-            className="text-sm rounded-lg border border-slate-300 bg-white/70 px-3 py-1.5 text-slate-600 hover:bg-white transition"
+            className="text-sm rounded-lg border border-slate-300 bg-white/70 px-3 py-1.5 text-slate-600 hover:bg-white transition whitespace-nowrap"
           >
             Log out
           </button>

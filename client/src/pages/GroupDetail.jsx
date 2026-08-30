@@ -5,6 +5,7 @@ import AddMemberModal from "../components/AddMemberModal";
 import AddExpenseModal from "../components/AddExpenseModal";
 import ExpenseList from "../components/ExpenseList";
 import BalancesSection from "../components/BalancesSection";
+import Spinner from "../components/Spinner";
 import { getGroup } from "../api/groups";
 import { getExpenses } from "../api/expenses";
 
@@ -74,8 +75,8 @@ function GroupDetail() {
 
       <main className="max-w-5xl mx-auto px-4 py-10">
         {loading && (
-          <div className="glass-card rounded-2xl p-10 text-center text-slate-500">
-            Loading group…
+          <div className="glass-card rounded-2xl p-6">
+            <Spinner label="Loading group…" />
           </div>
         )}
 
@@ -94,9 +95,9 @@ function GroupDetail() {
         {!loading && !error && group && (
           <div className="space-y-6">
             {/* Group heading */}
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="text-2xl font-bold text-slate-800 break-words">
                   {group.name}
                 </h2>
                 {group.createdBy?.name && (
@@ -107,7 +108,7 @@ function GroupDetail() {
               </div>
               <button
                 onClick={() => setShowAddMember(true)}
-                className="rounded-lg bg-emerald-600 text-white font-medium px-4 py-2 hover:bg-emerald-700 transition"
+                className="shrink-0 rounded-lg bg-emerald-600 text-white font-medium px-4 py-2 hover:bg-emerald-700 transition"
               >
                 + Add member
               </button>
@@ -122,10 +123,14 @@ function GroupDetail() {
                 {group.members?.map((m) => (
                   <li
                     key={m._id}
-                    className="py-3 flex items-center justify-between"
+                    className="py-3 flex items-center justify-between gap-3"
                   >
-                    <span className="font-medium text-slate-800">{m.name}</span>
-                    <span className="text-sm text-slate-500">{m.email}</span>
+                    <span className="font-medium text-slate-800 shrink-0">
+                      {m.name}
+                    </span>
+                    <span className="text-sm text-slate-500 truncate">
+                      {m.email}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -145,11 +150,7 @@ function GroupDetail() {
                 </button>
               </div>
 
-              {expensesLoading && (
-                <p className="text-slate-500 text-sm py-6 text-center">
-                  Loading expenses…
-                </p>
-              )}
+              {expensesLoading && <Spinner label="Loading expenses…" />}
 
               {!expensesLoading && expensesError && (
                 <div className="text-center py-6">
@@ -184,7 +185,10 @@ function GroupDetail() {
         open={showAddMember}
         group={group}
         onClose={() => setShowAddMember(false)}
-        onAdded={loadGroup}
+        onAdded={() => {
+          loadGroup();
+          setDataVersion((v) => v + 1);
+        }}
       />
       {group && (
         <AddExpenseModal

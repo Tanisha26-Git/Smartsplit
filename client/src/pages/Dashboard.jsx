@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import GroupCard from "../components/GroupCard";
 import CreateGroupModal from "../components/CreateGroupModal";
 import AddMemberModal from "../components/AddMemberModal";
+import Spinner from "../components/Spinner";
 import { getGroups } from "../api/groups";
 
 function Dashboard() {
@@ -51,8 +52,8 @@ function Dashboard() {
 
         {/* Loading state */}
         {loading && (
-          <div className="glass-card rounded-2xl p-10 text-center text-slate-500">
-            Loading your groups…
+          <div className="glass-card rounded-2xl p-6">
+            <Spinner label="Loading your groups…" />
           </div>
         )}
 
