@@ -11,7 +11,7 @@ A full-stack expense-splitting web app (Splitwise-style) that calculates the **m
 - Expense history
 
 ## 🛠️ Tech Stack
-- **Frontend:** React + Vite
+- **Frontend:** React + Vite, Tailwind CSS, React Router, Axios
 - **Backend:** Node.js + Express
 - **Database:** MongoDB (Mongoose)
 - **Auth:** JWT, bcryptjs
@@ -72,8 +72,19 @@ All routes are prefixed with `/api`. Routes marked 🔒 require a `Bearer <token
 
 Settle-up uses the **Min Cash Flow** algorithm to reduce a group's debts to the fewest possible payments. It computes each member's net balance (total paid − total owed), then **greedily** matches the biggest debtor against the biggest creditor, settling one of them fully in each transaction. Both groups are kept in **max-heaps** (priority queues) so each "biggest" lookup is `O(log n)`, giving an overall `O(n log n)` solution that produces at most `n − 1` transactions.
 
+## 🎨 Frontend
+
+A single-page React app (Vite) that talks to the REST API above.
+
+- **Stack:** React + Vite, Tailwind CSS, React Router for routing, Axios for API calls.
+- **Auth flow:** JWT-based. On login/signup the token (and basic user info) is stored in `localStorage`; an Axios request interceptor attaches it as a `Bearer` token on every request automatically. A `ProtectedRoute` wrapper guards authed pages and redirects to `/login` when there's no token.
+- **Groups UI:** dashboard listing your groups as cards (name + member count), a create-group modal, add-member by email, and a group detail page (`/groups/:id`) showing members — structured to hold expenses and settle-up next.
+- **Design:** a calm green, nature-themed UI built with layered CSS gradients (no external images) and frosted **glassmorphism** cards (`backdrop-blur`), fully responsive across mobile and desktop.
+
 ## 📌 Status
-🚧 In active development — backend complete (auth, groups, expenses, balances, settle-up)
+🚧 In active development
+- ✅ **Backend complete** — auth, groups, expenses, balances, settle-up
+- 🔨 **Frontend in progress** — auth pages + groups UI done; expenses & settle-up screens next
 
 ## 👩‍💻 Author
 **Tanisha** — [GitHub](https://github.com/Tanisha26-Git)
