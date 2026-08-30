@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { saveAuth } from "../utils/auth";
 
 function Login() {
   const navigate = useNavigate();
@@ -17,18 +18,23 @@ function Login() {
     setLoading(true);
     try {
       const { data } = await api.post("/auth/login", form);
-      localStorage.setItem("token", data.token);
+      saveAuth(data);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.msg || "Login failed. Please try again.");
+      setError(
+        err.response?.data?.msg ||
+          (err.request
+            ? "Can't reach the server. Is the backend running?"
+            : "Login failed. Please try again.")
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
+    <div className="nature-bg min-h-screen flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md glass-card rounded-2xl p-8">
         <h1 className="text-2xl font-bold text-slate-800 text-center">
           SmartSplit 💸
         </h1>
@@ -53,7 +59,7 @@ function Login() {
               value={form.email}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-300 bg-white/80 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="you@example.com"
             />
           </div>
@@ -68,7 +74,7 @@ function Login() {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-lg border border-slate-300 bg-white/80 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               placeholder="••••••••"
             />
           </div>
@@ -76,7 +82,7 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-indigo-600 text-white font-medium py-2 hover:bg-indigo-700 transition disabled:opacity-60"
+            className="w-full rounded-lg bg-emerald-600 text-white font-medium py-2 hover:bg-emerald-700 transition disabled:opacity-60"
           >
             {loading ? "Logging in…" : "Log In"}
           </button>
@@ -84,7 +90,7 @@ function Login() {
 
         <p className="text-center text-sm text-slate-500 mt-6">
           Don&apos;t have an account?{" "}
-          <Link to="/signup" className="text-indigo-600 font-medium hover:underline">
+          <Link to="/signup" className="text-emerald-700 font-medium hover:underline">
             Sign up
           </Link>
         </p>

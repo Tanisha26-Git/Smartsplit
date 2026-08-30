@@ -6,3 +6,59 @@ body,
   min-height: 100vh;
   margin: 0;
 }
+
+/* ---- Living green nature theme ---------------------------------------- */
+
+/* Layered emerald/forest scenery built from gradients: soft light pools up
+   top, a lush green field fading to deep forest at the bottom. Fully CSS —
+   no external images, no copyright concerns. */
+.nature-bg {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(1100px 550px at 12% 8%, rgba(217, 249, 157, 0.55), transparent 60%),
+    radial-gradient(1000px 650px at 88% 18%, rgba(110, 231, 183, 0.45), transparent 60%),
+    radial-gradient(1200px 900px at 50% 115%, rgba(6, 78, 59, 0.65), transparent 55%),
+    linear-gradient(160deg, #ecfdf5 0%, #a7f3d0 32%, #34d399 60%, #10b981 78%, #065f46 100%);
+}
+
+/* Soft, out-of-focus organic "foliage" blobs for depth and a living feel. */
+.nature-bg::before,
+.nature-bg::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+.nature-bg::before {
+  width: 40rem;
+  height: 40rem;
+  top: -12rem;
+  left: -10rem;
+  background: radial-gradient(circle at 30% 30%, #4ade80, #16a34a 70%);
+}
+.nature-bg::after {
+  width: 36rem;
+  height: 36rem;
+  bottom: -14rem;
+  right: -10rem;
+  background: radial-gradient(circle at 60% 40%, #6ee7b7, #047857 70%);
+}
+
+/* Anything the page renders should sit above the decorative blobs. */
+.nature-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Frosted glassmorphism card — keeps forms readable over the scenery. */
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 20px 45px -12px rgba(6, 78, 59, 0.4);
+}
