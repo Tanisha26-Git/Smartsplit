@@ -9,7 +9,7 @@ function Modal({ open, onClose, title, children }) {
         className="absolute inset-0 bg-emerald-950/30 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-md glass-card rounded-2xl p-6">
+      <div className="relative w-full max-w-md glass-card rounded-2xl p-6 max-h-[85vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-slate-800">{title}</h3>
           <button

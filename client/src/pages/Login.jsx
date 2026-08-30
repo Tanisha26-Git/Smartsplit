@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { saveAuth } from "../utils/auth";
+import VideoBackground from "../components/VideoBackground";
 
 function Login() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ function Login() {
 
   return (
     <div className="nature-bg min-h-screen flex items-center justify-center px-4 py-10">
+      <VideoBackground />
       <div className="w-full max-w-md glass-card rounded-2xl p-8">
         <h1 className="text-2xl font-bold text-slate-800 text-center">
           SmartSplit 💸

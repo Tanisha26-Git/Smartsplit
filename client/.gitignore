@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Original 4K source video (~43 MB) — only the compressed nature-bg-1080.mp4 is tracked
+public/nature-bg.mp4
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

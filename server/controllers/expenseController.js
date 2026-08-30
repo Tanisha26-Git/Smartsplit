@@ -7,12 +7,19 @@ const isMember = (group, userId) =>
 exports.addExpense = async (req, res) => {
   try {
     const { groupId } = req.params;
-    const { description, amount, splitType, splits, participants } = req.body;
+    const { description, amount, splitType, splits, participants, paidBy } =
+      req.body;
 
     const group = await Group.findById(groupId);
     if (!group) return res.status(404).json({ msg: "Group not found" });
     if (!isMember(group, req.user._id))
       return res.status(403).json({ msg: "Not a member of this group" });
+
+    // Who paid: defaults to the logged-in user (backward compatible), but the
+    // client may pick any group member. Whoever it is must be in the group.
+    const payerId = paidBy || req.user._id;
+    if (!isMember(group, payerId))
+      return res.status(400).json({ msg: "Payer must be a member of the group" });
 
     let computedSplits;
 
@@ -62,7 +69,7 @@ exports.addExpense = async (req, res) => {
       group: groupId,
       description,
       amount,
-      paidBy: req.user._id,
+      paidBy: payerId,
       splitType,
       splits: computedSplits,
     });

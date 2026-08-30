@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import AddMemberModal from "../components/AddMemberModal";
+import AddExpenseModal from "../components/AddExpenseModal";
+import ExpenseList from "../components/ExpenseList";
 import { getGroup } from "../api/groups";
+import { getExpenses } from "../api/expenses";
 
 function GroupDetail() {
   const { id } = useParams();
@@ -10,6 +13,11 @@ function GroupDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showAddMember, setShowAddMember] = useState(false);
+  const [showAddExpense, setShowAddExpense] = useState(false);
+
+  const [expenses, setExpenses] = useState([]);
+  const [expensesLoading, setExpensesLoading] = useState(true);
+  const [expensesError, setExpensesError] = useState("");
 
   const loadGroup = async () => {
     setLoading(true);
@@ -33,8 +41,27 @@ function GroupDetail() {
     }
   };
 
+  const loadExpenses = async () => {
+    setExpensesLoading(true);
+    setExpensesError("");
+    try {
+      const data = await getExpenses(id);
+      setExpenses(data);
+    } catch (err) {
+      setExpensesError(
+        err.response?.data?.msg ||
+          (err.request
+            ? "Can't reach the server. Is the backend running?"
+            : "Couldn't load expenses.")
+      );
+    } finally {
+      setExpensesLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadGroup();
+    loadExpenses();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -101,14 +128,47 @@ function GroupDetail() {
               </ul>
             </section>
 
-            {/* Placeholder sections — wired up in later days */}
+            {/* Expenses */}
             <section className="glass-card rounded-2xl p-6">
-              <h3 className="text-lg font-semibold text-slate-800 mb-1">
-                Expenses
-              </h3>
-              <p className="text-slate-500 text-sm">
-                Expenses for this group will appear here.
-              </p>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-slate-800">
+                  Expenses
+                </h3>
+                <button
+                  onClick={() => setShowAddExpense(true)}
+                  className="rounded-lg bg-emerald-600 text-white font-medium px-4 py-2 hover:bg-emerald-700 transition"
+                >
+                  + Add expense
+                </button>
+              </div>
+
+              {expensesLoading && (
+                <p className="text-slate-500 text-sm py-6 text-center">
+                  Loading expenses…
+                </p>
+              )}
+
+              {!expensesLoading && expensesError && (
+                <div className="text-center py-6">
+                  <p className="text-red-600 mb-3">{expensesError}</p>
+                  <button
+                    onClick={loadExpenses}
+                    className="rounded-lg border border-slate-300 bg-white/70 px-4 py-2 text-slate-700 hover:bg-white transition"
+                  >
+                    Try again
+                  </button>
+                </div>
+              )}
+
+              {!expensesLoading && !expensesError && expenses.length === 0 && (
+                <p className="text-slate-500 text-sm py-6 text-center">
+                  No expenses yet — add the first one to get started.
+                </p>
+              )}
+
+              {!expensesLoading && !expensesError && expenses.length > 0 && (
+                <ExpenseList expenses={expenses} />
+              )}
             </section>
 
             <section className="glass-card rounded-2xl p-6">
@@ -129,6 +189,14 @@ function GroupDetail() {
         onClose={() => setShowAddMember(false)}
         onAdded={loadGroup}
       />
+      {group && (
+        <AddExpenseModal
+          open={showAddExpense}
+          group={group}
+          onClose={() => setShowAddExpense(false)}
+          onAdded={loadExpenses}
+        />
+      )}
     </div>
   );
 }

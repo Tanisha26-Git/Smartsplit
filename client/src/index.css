@@ -54,6 +54,34 @@ body,
   z-index: 1;
 }
 
+/* Looping video background layer (auth pages). The two-class selector beats
+   `.nature-bg > *` above so these sit BEHIND the content (z-index 0) instead of
+   inheriting its relative/z-index:1. */
+.nature-bg > .video-bg,
+.nature-bg > .video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.video-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  background: #064e3b; /* dark-green fallback — no flash before the video loads */
+}
+/* Subtle dark-green wash between the video and the form for legibility. */
+.video-overlay {
+  background: rgba(6, 78, 59, 0.55);
+  pointer-events: none;
+}
+/* Reduced motion: drop the video and fall back to the static green scenery. */
+@media (prefers-reduced-motion: reduce) {
+  .video-bg {
+    display: none;
+  }
+}
+
 /* Frosted glassmorphism card — keeps forms readable over the scenery. */
 .glass-card {
   background: rgba(255, 255, 255, 0.72);
