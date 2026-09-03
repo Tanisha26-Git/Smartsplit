@@ -50,7 +50,7 @@ function Landing() {
   return (
     <div className="nature-bg min-h-screen flex flex-col">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-900">
+      <section className="relative overflow-hidden bg-gradient-to-br from-sky-700 via-blue-800 to-slate-900">
         <video
           className="hero-video"
           autoPlay
@@ -60,9 +60,9 @@ function Landing() {
           aria-hidden="true"
           tabIndex={-1}
         >
-          <source src="/nature-bg-1080.mp4" type="video/mp4" />
+          <source src="/sea-bg-1080.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-emerald-950/55" aria-hidden="true" />
+        <div className="absolute inset-0 bg-sky-950/60" aria-hidden="true" />
 
         <div className="relative z-10 mx-auto max-w-3xl px-4 py-24 sm:py-32 text-center text-white">
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">

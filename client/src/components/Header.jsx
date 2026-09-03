@@ -13,7 +13,7 @@ function Header({ back = false }) {
   };
 
   return (
-    <header className="bg-white/70 backdrop-blur-md border-b border-white/40">
+    <header className="bg-white/70 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-3 min-w-0">
           {back && (

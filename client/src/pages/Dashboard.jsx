@@ -36,7 +36,7 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="nature-bg min-h-screen">
+    <div className="bg-slate-50 min-h-screen">
       <Header />
 
       <main className="max-w-5xl mx-auto px-4 py-10">
@@ -52,18 +52,18 @@ function Dashboard() {
 
         {/* Loading state */}
         {loading && (
-          <div className="glass-card rounded-2xl p-6">
+          <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6">
             <Spinner label="Loading your groups…" />
           </div>
         )}
 
         {/* Error state */}
         {!loading && error && (
-          <div className="glass-card rounded-2xl p-8 text-center">
+          <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-8 text-center">
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={loadGroups}
-              className="rounded-lg border border-slate-300 bg-white/70 px-4 py-2 text-slate-700 hover:bg-white transition"
+              className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-700 hover:bg-slate-50 transition"
             >
               Try again
             </button>
@@ -72,7 +72,7 @@ function Dashboard() {
 
         {/* Empty state */}
         {!loading && !error && groups.length === 0 && (
-          <div className="glass-card rounded-2xl p-12 text-center">
+          <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-12 text-center">
             <p className="text-4xl mb-3">🌱</p>
             <h3 className="text-lg font-semibold text-slate-800">
               No groups yet

@@ -68,11 +68,11 @@ body,
   height: 100%;
   object-fit: cover;
   pointer-events: none;
-  background: #064e3b; /* dark-green fallback — no flash before the video loads */
+  background: #082f49; /* deep-ocean fallback — no flash before the video loads */
 }
-/* Subtle dark-green wash between the video and the form for legibility. */
+/* Subtle deep-blue wash between the sea video and the form for legibility. */
 .video-overlay {
-  background: rgba(6, 78, 59, 0.55);
+  background: rgba(8, 47, 73, 0.55);
   pointer-events: none;
 }
 /* Landing hero video: fills the hero section behind the overlay + content. */
@@ -82,7 +82,7 @@ body,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #064e3b; /* dark-green fallback while loading */
+  background: #082f49; /* deep-ocean fallback while loading */
 }
 
 /* Reduced motion: drop the videos and fall back to the static green scenery

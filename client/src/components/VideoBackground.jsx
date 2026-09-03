@@ -15,7 +15,7 @@ function VideoBackground() {
         aria-hidden="true"
         tabIndex={-1}
       >
-        <source src="/nature-bg-1080.mp4" type="video/mp4" />
+        <source src="/sea-bg-1080.mp4" type="video/mp4" />
       </video>
       <div className="video-overlay" aria-hidden="true" />
     </>

@@ -9,7 +9,7 @@ function GroupCard({ group, onAddMember }) {
   return (
     <div
       onClick={() => navigate(`/groups/${group._id}`)}
-      className="glass-card rounded-2xl p-5 cursor-pointer hover:shadow-2xl hover:-translate-y-0.5 transition"
+      className="bg-white border border-slate-200 shadow-sm rounded-2xl p-5 cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition"
     >
       <h3 className="text-lg font-semibold text-slate-800 truncate">
         {group.name}

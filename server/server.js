@@ -11,7 +11,18 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
+// Allow the deployed frontend (CLIENT_URL) plus the local dev server. Not
+// wide open in production — only these origins may call the API from a browser.
+const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"].filter(
+  Boolean
+);
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/groups", groupRoutes);

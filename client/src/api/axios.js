@@ -1,10 +1,15 @@
 import axios from "axios";
 import { logout } from "../utils/auth";
 
+// API origin comes from VITE_API_URL in production (e.g. the Render backend
+// URL), falling back to the local dev server. We append "/api" here so the
+// env var is just the origin.
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 // Single Axios instance for the whole app. Every request goes to the
 // SmartSplit backend under /api.
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: `${API_URL}/api`,
 });
 
 // Request interceptor: if we have a JWT saved from login/signup, attach it
