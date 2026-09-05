@@ -75,6 +75,15 @@ body,
   background: rgba(8, 47, 73, 0.55);
   pointer-events: none;
 }
+/* Top-right language switcher on the auth pages. Two-class selector beats
+   `.nature-bg > *` above, which would otherwise force position:relative. */
+.nature-bg > .lang-corner {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 20;
+}
+
 /* Landing hero video: fills the hero section behind the overlay + content. */
 .hero-video {
   position: absolute;

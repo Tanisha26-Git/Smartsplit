@@ -1,51 +1,31 @@
 import { Link, Navigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { isAuthenticated } from "../utils/auth";
-
-const steps = [
-  {
-    n: "1",
-    title: "Create a group",
-    desc: "Start a group and invite your friends by email.",
-  },
-  {
-    n: "2",
-    title: "Add expenses",
-    desc: "Log who paid and split equally, unequally, or by percentage.",
-  },
-  {
-    n: "3",
-    title: "Settle up",
-    desc: "See the fewest payments needed to clear every debt — in one tap.",
-  },
-];
-
-const features = [
-  {
-    icon: "👥",
-    title: "Group expense tracking",
-    desc: "Organize shared costs by group and keep everyone on the same page.",
-  },
-  {
-    icon: "➗",
-    title: "Flexible splits",
-    desc: "Split equally, by exact amounts, or by percentage — whatever fits.",
-  },
-  {
-    icon: "📊",
-    title: "Balance sheet",
-    desc: "Instantly see who owes whom, and by how much, at a glance.",
-  },
-  {
-    icon: "⚡",
-    title: "Smart settle-up",
-    desc: "A Min Cash Flow algorithm clears all debts in the fewest possible transactions.",
-    highlight: true,
-  },
-];
+import LanguageDropdown from "../components/LanguageDropdown";
 
 function Landing() {
+  const { t } = useTranslation();
+
   // Logged-in visitors skip the pitch and go straight to their dashboard.
   if (isAuthenticated()) return <Navigate to="/dashboard" replace />;
+
+  const steps = [
+    { n: "1", title: t("landing.step1Title"), desc: t("landing.step1Desc") },
+    { n: "2", title: t("landing.step2Title"), desc: t("landing.step2Desc") },
+    { n: "3", title: t("landing.step3Title"), desc: t("landing.step3Desc") },
+  ];
+
+  const features = [
+    { icon: "👥", title: t("landing.feat1Title"), desc: t("landing.feat1Desc") },
+    { icon: "➗", title: t("landing.feat2Title"), desc: t("landing.feat2Desc") },
+    { icon: "📊", title: t("landing.feat3Title"), desc: t("landing.feat3Desc") },
+    {
+      icon: "⚡",
+      title: t("landing.feat4Title"),
+      desc: t("landing.feat4Desc"),
+      highlight: true,
+    },
+  ];
 
   return (
     <div className="nature-bg min-h-screen flex flex-col">
@@ -64,25 +44,29 @@ function Landing() {
         </video>
         <div className="absolute inset-0 bg-sky-950/60" aria-hidden="true" />
 
+        <div className="absolute top-4 right-4 z-20">
+          <LanguageDropdown variant="onDark" />
+        </div>
+
         <div className="relative z-10 mx-auto max-w-3xl px-4 py-24 sm:py-32 text-center text-white">
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
             SmartSplit 💸
           </h1>
           <p className="mt-5 text-lg sm:text-2xl text-emerald-50/90">
-            Split expenses effortlessly — settle up in the fewest payments.
+            {t("landing.tagline")}
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               to="/signup"
               className="rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-semibold px-6 py-3 shadow-lg transition"
             >
-              Get Started
+              {t("landing.getStarted")}
             </Link>
             <Link
               to="/login"
               className="rounded-lg bg-white/15 hover:bg-white/25 backdrop-blur border border-white/40 text-white font-semibold px-6 py-3 transition"
             >
-              Log In
+              {t("landing.logIn")}
             </Link>
           </div>
         </div>
@@ -91,7 +75,7 @@ function Landing() {
       {/* How it works */}
       <section className="mx-auto w-full max-w-5xl px-4 py-16">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-10">
-          How it works
+          {t("landing.howItWorks")}
         </h2>
         <div className="grid gap-6 sm:grid-cols-3">
           {steps.map((s) => (
@@ -109,7 +93,7 @@ function Landing() {
       {/* Features */}
       <section className="mx-auto w-full max-w-5xl px-4 pb-16">
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-10">
-          Features
+          {t("landing.features")}
         </h2>
         <div className="grid gap-6 sm:grid-cols-2">
           {features.map((f) => (
@@ -124,7 +108,7 @@ function Landing() {
                 {f.title}
                 {f.highlight && (
                   <span className="text-xs font-semibold uppercase tracking-wide bg-emerald-600 text-white px-2 py-0.5 rounded-full">
-                    Standout
+                    {t("landing.standout")}
                   </span>
                 )}
               </h3>
@@ -138,7 +122,8 @@ function Landing() {
       <footer className="mt-auto border-t border-white/30 bg-emerald-950/25 backdrop-blur">
         <div className="mx-auto max-w-5xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-emerald-50">
           <span>
-            Built by <span className="font-semibold text-white">Tanisha</span>
+            {t("landing.builtBy")}{" "}
+            <span className="font-semibold text-white">Tanisha</span>
           </span>
           <a
             href="https://github.com/Tanisha26-Git"

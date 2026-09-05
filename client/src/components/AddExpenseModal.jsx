@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Modal from "./Modal";
 import { addExpense } from "../api/expenses";
 import { getUser } from "../utils/auth";
 import { formatMoney } from "../utils/format";
+import { apiErrorMessage } from "../utils/apiError";
 import { useToast } from "./Toast";
 
 // Add-expense form supporting equal / unequal / percentage splits.
@@ -10,6 +12,7 @@ import { useToast } from "./Toast";
 // - unequal: an amount input per member; must sum to the total
 // - percentage: a percent input per member; must sum to 100
 function AddExpenseModal({ open, onClose, group, onAdded }) {
+  const { t } = useTranslation();
   const toast = useToast();
   const members = group?.members || [];
   const currentUser = getUser();
@@ -60,7 +63,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
     setError("");
 
     if (amountNum <= 0) {
-      setError("Enter an amount greater than 0.");
+      setError(t("expense.amountError"));
       return;
     }
 
@@ -74,9 +77,10 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
     if (splitType === "unequal") {
       if (Math.abs(allocated - amountNum) > 0.01) {
         setError(
-          `Split amounts add up to ${formatMoney(
-            allocated
-          )}, but the total is ${formatMoney(amountNum)}.`
+          t("expense.unequalError", {
+            allocated: formatMoney(allocated),
+            total: formatMoney(amountNum),
+          })
         );
         return;
       }
@@ -86,7 +90,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
       }));
     } else if (splitType === "percentage") {
       if (Math.abs(percentTotal - 100) > 0.01) {
-        setError(`Percentages add up to ${percentTotal}%, but must total 100%.`);
+        setError(t("expense.percentError", { percent: percentTotal }));
         return;
       }
       payload.splits = members.map((m) => ({
@@ -98,11 +102,11 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
     setLoading(true);
     try {
       await addExpense(group._id, payload);
-      toast("Expense added ✅");
+      toast(t("toast.expenseAdded"));
       onAdded();
       close();
     } catch (err) {
-      setError(err.response?.data?.msg || "Couldn't add the expense.");
+      setError(apiErrorMessage(err, "expense.genericError"));
     } finally {
       setLoading(false);
     }
@@ -112,7 +116,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
     "w-full rounded-lg border border-slate-300 bg-white/80 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500";
 
   return (
-    <Modal open={open} onClose={close} title="Add an expense">
+    <Modal open={open} onClose={close} title={t("expense.title")}>
       {error && (
         <div className="mb-4 rounded-lg bg-red-50 text-red-600 text-sm px-4 py-2">
           {error}
@@ -122,7 +126,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Description
+            {t("expense.description")}
           </label>
           <input
             type="text"
@@ -131,13 +135,13 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
             required
             autoFocus
             className={inputClass}
-            placeholder="Dinner, cab, groceries…"
+            placeholder={t("expense.descPlaceholder")}
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Amount
+            {t("expense.amount")}
           </label>
           <input
             type="number"
@@ -153,7 +157,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Paid by
+            {t("expense.paidBy")}
           </label>
           <select
             value={payer}
@@ -170,24 +174,23 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Split type
+            {t("expense.splitType")}
           </label>
           <select
             value={splitType}
             onChange={(e) => setSplitType(e.target.value)}
             className={inputClass}
           >
-            <option value="equal">Equal</option>
-            <option value="unequal">Unequal (exact amounts)</option>
-            <option value="percentage">Percentage</option>
+            <option value="equal">{t("expense.equal")}</option>
+            <option value="unequal">{t("expense.unequal")}</option>
+            <option value="percentage">{t("expense.percentage")}</option>
           </select>
         </div>
 
         {/* Equal: nothing to configure */}
         {splitType === "equal" && (
           <p className="text-sm text-slate-500">
-            Split equally across all {members.length} member
-            {members.length !== 1 ? "s" : ""}.
+            {t("expense.equalHint", { count: members.length })}
           </p>
         )}
 
@@ -222,7 +225,10 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
                   : "text-amber-600"
               }`}
             >
-              Allocated {formatMoney(allocated)} / {formatMoney(amountNum)}
+              {t("expense.allocated", {
+                allocated: formatMoney(allocated),
+                total: formatMoney(amountNum),
+              })}
             </p>
           </div>
         )}
@@ -263,7 +269,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
                   : "text-amber-600"
               }`}
             >
-              Total {percentTotal}% / 100%
+              {t("expense.totalPercent", { percent: percentTotal })}
             </p>
           </div>
         )}
@@ -273,7 +279,7 @@ function AddExpenseModal({ open, onClose, group, onAdded }) {
           disabled={loading}
           className="w-full rounded-lg bg-emerald-600 text-white font-medium py-2 hover:bg-emerald-700 transition disabled:opacity-60"
         >
-          {loading ? "Adding…" : "Add expense"}
+          {loading ? t("expense.adding") : t("expense.add")}
         </button>
       </form>
     </Modal>

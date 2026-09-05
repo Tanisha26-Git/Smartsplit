@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import api from "../api/axios";
 import { saveAuth } from "../utils/auth";
+import { apiErrorMessage } from "../utils/apiError";
 import VideoBackground from "../components/VideoBackground";
+import LanguageDropdown from "../components/LanguageDropdown";
 
 function Login() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,12 +26,7 @@ function Login() {
       saveAuth(data);
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        err.response?.data?.msg ||
-          (err.request
-            ? "Can't reach the server. Is the backend running?"
-            : "Login failed. Please try again.")
-      );
+      setError(apiErrorMessage(err, "auth.loginFailed"));
     } finally {
       setLoading(false);
     }
@@ -36,12 +35,15 @@ function Login() {
   return (
     <div className="nature-bg min-h-screen flex items-center justify-center px-4 py-10">
       <VideoBackground />
+      <div className="lang-corner">
+        <LanguageDropdown variant="onDark" />
+      </div>
       <div className="w-full max-w-md glass-card rounded-2xl p-8">
         <h1 className="text-2xl font-bold text-slate-800 text-center">
           SmartSplit 💸
         </h1>
         <p className="text-slate-500 text-center mt-1 mb-6">
-          Welcome back — log in to your account
+          {t("auth.welcomeBack")}
         </p>
 
         {error && (
@@ -53,7 +55,7 @@ function Login() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Email
+              {t("auth.email")}
             </label>
             <input
               type="email"
@@ -68,7 +70,7 @@ function Login() {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Password
+              {t("auth.password")}
             </label>
             <input
               type="password"
@@ -86,14 +88,14 @@ function Login() {
             disabled={loading}
             className="w-full rounded-lg bg-emerald-600 text-white font-medium py-2 hover:bg-emerald-700 transition disabled:opacity-60"
           >
-            {loading ? "Logging in…" : "Log In"}
+            {loading ? t("auth.loggingIn") : t("auth.logInBtn")}
           </button>
         </form>
 
         <p className="text-center text-sm text-slate-500 mt-6">
-          Don&apos;t have an account?{" "}
+          {t("auth.noAccount")}{" "}
           <Link to="/signup" className="text-emerald-700 font-medium hover:underline">
-            Sign up
+            {t("auth.signUpLink")}
           </Link>
         </p>
       </div>

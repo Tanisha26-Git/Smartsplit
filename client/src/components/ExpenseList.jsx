@@ -1,8 +1,16 @@
+import { useTranslation } from "react-i18next";
 import { formatMoney } from "../utils/format";
+
+const TYPE_KEY = {
+  equal: "expense.typeEqual",
+  unequal: "expense.typeUnequal",
+  percentage: "expense.typePercentage",
+};
 
 // Renders a group's expenses. Each row shows the description, amount, who paid,
 // the split type, and the per-member breakdown.
 function ExpenseList({ expenses }) {
+  const { t } = useTranslation();
   return (
     <ul className="divide-y divide-slate-200/70">
       {expenses.map((exp) => (
@@ -13,7 +21,12 @@ function ExpenseList({ expenses }) {
                 {exp.description}
               </p>
               <p className="text-xs text-slate-500 mt-0.5">
-                Paid by {exp.paidBy?.name || "—"} · {exp.splitType}
+                {t("expense.paidByType", {
+                  name: exp.paidBy?.name || "—",
+                  type: TYPE_KEY[exp.splitType]
+                    ? t(TYPE_KEY[exp.splitType])
+                    : exp.splitType,
+                })}
               </p>
             </div>
             <p className="font-semibold text-slate-800 whitespace-nowrap">

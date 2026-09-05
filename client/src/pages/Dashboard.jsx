@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import GroupCard from "../components/GroupCard";
 import CreateGroupModal from "../components/CreateGroupModal";
 import AddMemberModal from "../components/AddMemberModal";
 import Spinner from "../components/Spinner";
 import { getGroups } from "../api/groups";
+import { apiErrorMessage } from "../utils/apiError";
 
 function Dashboard() {
+  const { t } = useTranslation();
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -20,12 +23,7 @@ function Dashboard() {
       const data = await getGroups();
       setGroups(data);
     } catch (err) {
-      setError(
-        err.response?.data?.msg ||
-          (err.request
-            ? "Can't reach the server. Is the backend running?"
-            : "Couldn't load your groups.")
-      );
+      setError(apiErrorMessage(err, "dashboard.loadError"));
     } finally {
       setLoading(false);
     }
@@ -41,19 +39,21 @@ function Dashboard() {
 
       <main className="max-w-5xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-slate-800">Your Groups</h2>
+          <h2 className="text-2xl font-bold text-slate-800">
+            {t("dashboard.yourGroups")}
+          </h2>
           <button
             onClick={() => setShowCreate(true)}
             className="rounded-lg bg-emerald-600 text-white font-medium px-4 py-2 hover:bg-emerald-700 transition"
           >
-            + New group
+            + {t("dashboard.newGroup")}
           </button>
         </div>
 
         {/* Loading state */}
         {loading && (
           <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-6">
-            <Spinner label="Loading your groups…" />
+            <Spinner label={t("dashboard.loadingGroups")} />
           </div>
         )}
 
@@ -65,7 +65,7 @@ function Dashboard() {
               onClick={loadGroups}
               className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-700 hover:bg-slate-50 transition"
             >
-              Try again
+              {t("common.tryAgain")}
             </button>
           </div>
         )}
@@ -75,16 +75,16 @@ function Dashboard() {
           <div className="bg-white border border-slate-200 shadow-sm rounded-2xl p-12 text-center">
             <p className="text-4xl mb-3">🌱</p>
             <h3 className="text-lg font-semibold text-slate-800">
-              No groups yet
+              {t("dashboard.noGroupsTitle")}
             </h3>
             <p className="text-slate-500 mt-1 mb-6">
-              Create your first group to start splitting expenses.
+              {t("dashboard.noGroupsDesc")}
             </p>
             <button
               onClick={() => setShowCreate(true)}
               className="rounded-lg bg-emerald-600 text-white font-medium px-5 py-2.5 hover:bg-emerald-700 transition"
             >
-              + Create a group
+              + {t("dashboard.createGroupCta")}
             </button>
           </div>
         )}

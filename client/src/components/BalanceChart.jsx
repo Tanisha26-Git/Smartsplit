@@ -9,11 +9,13 @@ import {
   ReferenceLine,
   CartesianGrid,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import { formatMoney } from "../utils/format";
 
 // Bar chart of each member's net balance. Green bars = owed money (positive),
 // red bars = owes money (negative). Responsive to its container width.
 function BalanceChart({ balances }) {
+  const { t } = useTranslation();
   const data = balances.map((b) => ({
     name: b.name,
     balance: Number(Number(b.balance).toFixed(2)),
@@ -27,7 +29,7 @@ function BalanceChart({ balances }) {
           <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#475569" }} />
           <YAxis tick={{ fontSize: 12, fill: "#475569" }} />
           <Tooltip
-            formatter={(v) => [formatMoney(v), "Net balance"]}
+            formatter={(v) => [formatMoney(v), t("balances.netBalance")]}
             contentStyle={{ borderRadius: 8, border: "1px solid #a7f3d0" }}
           />
           <ReferenceLine y={0} stroke="#94a3b8" />

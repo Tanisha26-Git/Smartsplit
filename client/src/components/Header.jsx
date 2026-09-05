@@ -1,10 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { getUser, logout } from "../utils/auth";
+import LanguageDropdown from "./LanguageDropdown";
 
 // Shared top bar used across the authed pages. Pass `back` to show a link
 // back to the dashboard (used on the group detail page).
 function Header({ back = false }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const user = getUser();
 
   const handleLogout = () => {
@@ -21,7 +24,7 @@ function Header({ back = false }) {
               to="/dashboard"
               className="text-sm text-slate-500 hover:text-slate-800 transition whitespace-nowrap"
             >
-              ← Back
+              ← {t("common.back")}
             </Link>
           )}
           <Link
@@ -31,17 +34,18 @@ function Header({ back = false }) {
             SmartSplit 💸
           </Link>
         </div>
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {user?.name && (
             <span className="hidden sm:inline text-sm text-slate-600">
-              Hi, <span className="font-medium text-slate-800">{user.name}</span>
+              {t("nav.greeting", { name: user.name })}
             </span>
           )}
+          <LanguageDropdown />
           <button
             onClick={handleLogout}
             className="text-sm rounded-lg border border-slate-300 bg-white/70 px-3 py-1.5 text-slate-600 hover:bg-white transition whitespace-nowrap"
           >
-            Log out
+            {t("common.logout")}
           </button>
         </div>
       </div>

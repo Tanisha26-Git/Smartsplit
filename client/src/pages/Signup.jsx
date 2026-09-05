@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import api from "../api/axios";
 import { saveAuth } from "../utils/auth";
+import { apiErrorMessage } from "../utils/apiError";
 import VideoBackground from "../components/VideoBackground";
+import LanguageDropdown from "../components/LanguageDropdown";
 
 function Signup() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,12 +26,7 @@ function Signup() {
       saveAuth(data);
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        err.response?.data?.msg ||
-          (err.request
-            ? "Can't reach the server. Is the backend running?"
-            : "Signup failed. Please try again.")
-      );
+      setError(apiErrorMessage(err, "auth.signupFailed"));
     } finally {
       setLoading(false);
     }
@@ -36,12 +35,15 @@ function Signup() {
   return (
     <div className="nature-bg min-h-screen flex items-center justify-center px-4 py-10">
       <VideoBackground />
+      <div className="lang-corner">
+        <LanguageDropdown variant="onDark" />
+      </div>
       <div className="w-full max-w-md glass-card rounded-2xl p-8">
         <h1 className="text-2xl font-bold text-slate-800 text-center">
           SmartSplit 💸
         </h1>
         <p className="text-slate-500 text-center mt-1 mb-6">
-          Create an account to start splitting
+          {t("auth.createAccount")}
         </p>
 
         {error && (
@@ -53,7 +55,7 @@ function Signup() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Name
+              {t("auth.name")}
             </label>
             <input
               type="text"
@@ -62,13 +64,13 @@ function Signup() {
               onChange={handleChange}
               required
               className="w-full rounded-lg border border-slate-300 bg-white/80 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              placeholder="Jane Doe"
+              placeholder={t("auth.namePlaceholder")}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Email
+              {t("auth.email")}
             </label>
             <input
               type="email"
@@ -83,7 +85,7 @@ function Signup() {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Password
+              {t("auth.password")}
             </label>
             <input
               type="password"
@@ -101,14 +103,14 @@ function Signup() {
             disabled={loading}
             className="w-full rounded-lg bg-emerald-600 text-white font-medium py-2 hover:bg-emerald-700 transition disabled:opacity-60"
           >
-            {loading ? "Creating account…" : "Sign Up"}
+            {loading ? t("auth.creatingAccount") : t("auth.signUpBtn")}
           </button>
         </form>
 
         <p className="text-center text-sm text-slate-500 mt-6">
-          Already have an account?{" "}
+          {t("auth.haveAccount")}{" "}
           <Link to="/login" className="text-emerald-700 font-medium hover:underline">
-            Log in
+            {t("auth.logInLink")}
           </Link>
         </p>
       </div>

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // A single group tile. Clicking the card opens the group detail page; the
 // "Add member" button stops propagation so it doesn't also navigate.
 function GroupCard({ group, onAddMember }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const count = group.members?.length || 0;
 
   return (
@@ -15,10 +17,12 @@ function GroupCard({ group, onAddMember }) {
         {group.name}
       </h3>
       <p className="text-sm text-slate-500 mt-1">
-        {count} member{count !== 1 ? "s" : ""}
+        {t("group.memberCount", { count })}
       </p>
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-sm text-emerald-700 font-medium">View →</span>
+        <span className="text-sm text-emerald-700 font-medium">
+          {t("group.view")} →
+        </span>
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -26,7 +30,7 @@ function GroupCard({ group, onAddMember }) {
           }}
           className="text-sm rounded-lg border border-emerald-300 bg-white/70 px-3 py-1.5 text-emerald-700 hover:bg-emerald-50 transition"
         >
-          + Add member
+          + {t("group.addMember")}
         </button>
       </div>
     </div>

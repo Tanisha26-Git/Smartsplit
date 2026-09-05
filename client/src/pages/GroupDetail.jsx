@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Header from "../components/Header";
 import AddMemberModal from "../components/AddMemberModal";
 import AddExpenseModal from "../components/AddExpenseModal";
@@ -8,9 +9,11 @@ import BalancesSection from "../components/BalancesSection";
 import Spinner from "../components/Spinner";
 import { getGroup } from "../api/groups";
 import { getExpenses } from "../api/expenses";
+import { apiErrorMessage } from "../utils/apiError";
 
 function GroupDetail() {
   const { id } = useParams();
+  const { t } = useTranslation();
   const [group, setGroup] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,17 +32,12 @@ function GroupDetail() {
     try {
       const data = await getGroup(id);
       if (!data) {
-        setError("Group not found — you may not be a member of it.");
+        setError(t("group.notFound"));
       } else {
         setGroup(data);
       }
     } catch (err) {
-      setError(
-        err.response?.data?.msg ||
-          (err.request
-            ? "Can't reach the server. Is the backend running?"
-            : "Couldn't load this group.")
-      );
+      setError(apiErrorMessage(err, "group.loadError"));
     } finally {
       setLoading(false);
     }
@@ -52,12 +50,7 @@ function GroupDetail() {
       const data = await getExpenses(id);
       setExpenses(data);
     } catch (err) {
-      setExpensesError(
-        err.response?.data?.msg ||
-          (err.request
-            ? "Can't reach the server. Is the backend running?"
-            : "Couldn't load expenses.")
-      );
+      setExpensesError(apiErrorMessage(err, "group.expensesError"));
     } finally {
       setExpensesLoading(false);
     }
@@ -76,7 +69,7 @@ function GroupDetail() {
       <main className="max-w-5xl mx-auto px-4 py-10">
         {loading && (
           <div className="glass-card rounded-2xl p-6">
-            <Spinner label="Loading group…" />
+            <Spinner label={t("group.loadingGroup")} />
           </div>
         )}
 
@@ -87,7 +80,7 @@ function GroupDetail() {
               onClick={loadGroup}
               className="rounded-lg border border-slate-300 bg-white/70 px-4 py-2 text-slate-700 hover:bg-white transition"
             >
-              Try again
+              {t("common.tryAgain")}
             </button>
           </div>
         )}
@@ -102,7 +95,7 @@ function GroupDetail() {
                 </h2>
                 {group.createdBy?.name && (
                   <p className="text-sm text-slate-500 mt-1">
-                    Created by {group.createdBy.name}
+                    {t("group.createdBy", { name: group.createdBy.name })}
                   </p>
                 )}
               </div>
@@ -110,14 +103,14 @@ function GroupDetail() {
                 onClick={() => setShowAddMember(true)}
                 className="shrink-0 rounded-lg bg-emerald-600 text-white font-medium px-4 py-2 hover:bg-emerald-700 transition"
               >
-                + Add member
+                + {t("group.addMember")}
               </button>
             </div>
 
             {/* Members section */}
             <section className="glass-card rounded-2xl p-6">
               <h3 className="text-lg font-semibold text-slate-800 mb-4">
-                Members ({group.members?.length || 0})
+                {t("group.members", { count: group.members?.length || 0 })}
               </h3>
               <ul className="divide-y divide-slate-200/70">
                 {group.members?.map((m) => (
@@ -140,17 +133,17 @@ function GroupDetail() {
             <section className="glass-card rounded-2xl p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-slate-800">
-                  Expenses
+                  {t("group.expenses")}
                 </h3>
                 <button
                   onClick={() => setShowAddExpense(true)}
                   className="rounded-lg bg-emerald-600 text-white font-medium px-4 py-2 hover:bg-emerald-700 transition"
                 >
-                  + Add expense
+                  + {t("group.addExpense")}
                 </button>
               </div>
 
-              {expensesLoading && <Spinner label="Loading expenses…" />}
+              {expensesLoading && <Spinner label={t("group.loadingExpenses")} />}
 
               {!expensesLoading && expensesError && (
                 <div className="text-center py-6">
@@ -159,14 +152,14 @@ function GroupDetail() {
                     onClick={loadExpenses}
                     className="rounded-lg border border-slate-300 bg-white/70 px-4 py-2 text-slate-700 hover:bg-white transition"
                   >
-                    Try again
+                    {t("common.tryAgain")}
                   </button>
                 </div>
               )}
 
               {!expensesLoading && !expensesError && expenses.length === 0 && (
                 <p className="text-slate-500 text-sm py-6 text-center">
-                  No expenses yet — add the first one to get started.
+                  {t("group.noExpenses")}
                 </p>
               )}
 
